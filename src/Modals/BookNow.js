@@ -4,6 +4,7 @@ import { TextField, Typography, Button } from '@material-ui/core'
 import ModalComponent from '../components/ModalComponent/ModalComponent'
 import TimeSelector from '../utils/TimeSelector'
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { addUserBookings } from '../Api/apis'
 
 
 const hairStyles = [
@@ -25,8 +26,17 @@ const hairStyles = [
 ];
 
 
-const BookNow = ({ open, handleClose }) => {
+const BookNow = ({ open, handleClose, shop_name }) => {
     const [bookForm, setBookForm] = useState({ name: '', price: '', time: '', gender: '', phone: '' })
+
+    const handleAddBookings = async () => {
+        const response = await addUserBookings({
+            ...bookForm,
+            shopId: shop_name
+        })
+
+        console.log(response)
+    }
     return (
         <ModalComponent
             open={open}
@@ -76,7 +86,9 @@ const BookNow = ({ open, handleClose }) => {
                         (val) => setBookForm({ ...bookForm, time: val.target.value })
                     } />
                 </Flexbox>
-                <Button variant='contained'>
+                <Button onClick={() => {
+                    handleAddBookings()
+                }} variant='contained'>
                     Book
                 </Button>
 

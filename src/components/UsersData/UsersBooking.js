@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Flexbox } from '../../styled-component';
 import { Typography, Button } from '@material-ui/core'
 import ModalComponent from '../../components/ModalComponent/ModalComponent'
+import { getUsersBookings } from '../../Api/apis';
 
 
 
@@ -27,6 +28,15 @@ const Bookings = [
 const UsersBooking = ({ open, handleClose }) => {
     const [myBooking, setMyBookings] = useState(Bookings)
 
+    const handleGetUserBookings = async () => {
+        const response = await getUsersBookings()
+        console.log(response, "usersbookings")
+        setMyBookings(response)
+    }
+
+    useEffect(() => {
+        handleGetUserBookings()
+    }, [])
     return (
         <ModalComponent
             open={open}

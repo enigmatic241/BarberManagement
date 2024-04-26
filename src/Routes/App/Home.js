@@ -1,12 +1,16 @@
 import React from 'react'
 import { Flexbox } from '../../styled-component'
 
-const Home = () => {
-    return (
-        <Flexbox height={'100vh'} >
-            <h1>Home</h1>
+import useUserDetails from '../../components/Hooks/useUserDetails'
+import UserHome from './UserHome/UserHome'
 
-        </Flexbox>
+const Home = () => {
+    const { userType } = useUserDetails()
+    return (
+        <>
+            {userType === 'CUSTOMER' && <UserHome />}
+
+        </>
     )
 }
 

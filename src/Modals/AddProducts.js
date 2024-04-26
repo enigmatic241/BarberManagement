@@ -3,11 +3,27 @@ import React, { useState } from 'react'
 import { Flexbox } from '../styled-component';
 import { TextField, Button } from '@material-ui/core';
 import ModalComponent from '../components/ModalComponent/ModalComponent';
+import { addProductsOfShops } from '../Api/apis';
+
+
+const shopName = 'mrigank'
 
 
 const AddProducts = ({ open, handleClose, classes }) => {
 
     const [productsForm, setProductsForm] = useState({ name: '', price: '', description: '' })
+
+    const handleAddProducts = async () => {
+        const response = await addProductsOfShops({
+            ...productsForm,
+            shopName
+        })
+        console.log(response)
+        if (response) {
+            alert('Product Added Successfully')
+            handleClose()
+        }
+    }
 
     return (
         <ModalComponent
@@ -41,7 +57,9 @@ const AddProducts = ({ open, handleClose, classes }) => {
                         onChange={(e) => setProductsForm({ ...productsForm, description: e.target.value })}
                     />
                 </Flexbox>
-                <Button variant={'contained'}>
+                <Button onClick={() => {
+                    handleAddProducts()
+                }} variant={'contained'}>
                     Add Product
                 </Button>
             </Flexbox>

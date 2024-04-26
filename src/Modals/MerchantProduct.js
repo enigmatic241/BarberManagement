@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Flexbox } from '../styled-component';
 import { Typography, Button } from '@material-ui/core'
 import ModalComponent from '../components/ModalComponent/ModalComponent'
+import { getBarberProducts } from '../Api/apis';
 
 
 
@@ -34,6 +35,18 @@ const BarbProducts = [
 const MerchantProduct = ({ open, handleClose }) => {
     const [barberProducts, setBarberProducts] = useState(BarbProducts)
 
+    const getProducts = async () => {
+        const response = await getBarberProducts()
+        if (response) {
+            setBarberProducts(response)
+        }
+        console.log(response)
+    }
+
+    useEffect(() => {
+        getProducts()
+    }, [open])
+
     return (
         <ModalComponent
             open={open}
@@ -50,7 +63,7 @@ const MerchantProduct = ({ open, handleClose }) => {
                         <Typography>{item.description}</Typography>
                         <Button onClick={() => {
                             const updatedBookings = barberProducts.filter(booking => booking.name !== item.name)
-                            setBarberProducts(updatedBookings)
+                            // setBarberProducts(updatedBookings)
                         }} variant={'contained'}>Cancel</Button>
                     </Flexbox>
                 ))}

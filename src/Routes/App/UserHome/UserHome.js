@@ -38,11 +38,14 @@ const UserHome = () => {
             {
                 DUMMY_BARBER_SHOP.map((shop, index) => {
                     return (
-                        <Card key={index} shop={shop} setOpen={setOpen} />
+                        <>
+                            <Card key={index} shop={shop} setOpen={setOpen} />
+                            <BookNow shop_name={shop.name} open={open} handleClose={() => setOpen(false)} title={'Profile'} />
+                        </>
                     )
                 })
             }
-            <BookNow open={open} handleClose={() => setOpen(false)} title={'Profile'} />
+
         </Flexbox>
     )
 }

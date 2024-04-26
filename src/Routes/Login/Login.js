@@ -8,9 +8,10 @@ import { useNavigate } from 'react-router-dom';
 
 
 
+const USER_TYPE = []
 
 const Login = () => {
-    const [loginForm, setLoginForm] = useState({ email: '', password: '' })
+    const [loginForm, setLoginForm] = useState({ email: '', password: '', user_type: '' })
     const { userLoggedIn, isEmailUser, isGoogleUser, currentUser, setCurrentUser } = useAuth()
 
     const [isSigningIn, setIsSigningIn] = useState(false)
@@ -18,21 +19,20 @@ const Login = () => {
 
     const navigate = useNavigate()
 
+
     const onSubmit = async (e) => {
         e.preventDefault()
         if (!isSigningIn) {
             setIsSigningIn(true)
             try {
                 await doSignInWithEmailAndPassword(loginForm.email, loginForm.password)
-                navigate('/home')
+                navigate('/user_home')
+
             } catch (err) {
                 setErrorMessage(err.message)
                 setIsSigningIn(false)
             }
-
-
             // doSendEmailVerification()
-
         }
     }
 
@@ -45,6 +45,8 @@ const Login = () => {
             })
         }
     }
+
+
 
     return (
         <Flexbox align={'center'} center={'center'} height={'calc(100vh - 64px)'} width={'100%'}>
@@ -68,6 +70,8 @@ const Login = () => {
                         onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                     />
 
+
+
                 </Flexbox>
                 <Button onClick={(e) => onSubmit(e)} variant={'contained'} color={'primary'}>Login</Button>
                 <button
@@ -83,3 +87,27 @@ const Login = () => {
 }
 
 export default Login
+
+export const Logout = ({ handleMenuClose }) => {
+    const { doSignOut } = useAuth()
+    const navigate = useNavigate()
+    const [isSignOut, setSignOut] = useState(false)
+    const handleLogOut = async (e) => {
+        e.preventDefault()
+        if (!isSignOut) {
+            setSignOut(true)
+            try {
+                await doSignOut()
+                navigate('/')
+            } catch (err) {
+                // setErrorMessage(err.message)
+                setSignOut(false)
+            }
+
+
+            // doSendEmailVerification()
+
+        }
+    }
+    <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+}
