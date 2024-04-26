@@ -27,6 +27,8 @@ const DUMMY_BARBER_SHOP = [
 
 const UserHome = () => {
     const [open, setOpen] = React.useState(false)
+
+    console.log(open, "open")
     return (
         <Flexbox style={{
             flexWrap: 'wrap',

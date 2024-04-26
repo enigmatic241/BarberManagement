@@ -22,7 +22,7 @@ const styles = theme => ({
         backgroundColor: 'white',
     },
     card: {
-        width: 600,
+        width: 700,
         maxHeight: `calc(100vh - ${theme.appBarHeight + 2 * theme.pad?.lg}px)`,
         maxWidth: `calc(100vw - ${2 * theme.pad?.sm}px)`,
         margin: '6px',

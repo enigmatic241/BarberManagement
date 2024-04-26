@@ -7,6 +7,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { addUserBookings } from '../Api/apis'
 
 
+
 const hairStyles = [
     { name: 'Trim', price: '₹300' },
     { name: 'Layered Cut', price: '₹500' },
@@ -30,29 +31,36 @@ const BookNow = ({ open, handleClose, shop_name }) => {
     const [bookForm, setBookForm] = useState({ name: '', price: '', time: '', gender: '', phone: '' })
 
     const handleAddBookings = async () => {
-        const response = await addUserBookings({
-            ...bookForm,
-            shopId: shop_name
-        })
+        try {
+            const response = await addUserBookings({
+                ...bookForm,
+                shopId: shop_name
+            })
+            handleClose()
+        } catch (err) {
+            console.log(err)
+        }
 
-        console.log(response)
+
     }
     return (
         <ModalComponent
             open={open}
             onClose={handleClose}
-            title={'Book Now'}
-            // classes={classes}
+            title={`Book Now in ${shop_name}`}
+
             divider={true}
+
         >
             <Flexbox dir={'column'} pad={'16px'} height={'100%'} gap={'24px'}>
                 <Flexbox dir={'column'} gap={'16px'}>
 
                     <Autocomplete
-                        id="combo-box-demo"
+                        fullWidth
                         options={hairStyles}
                         getOptionLabel={(option) => `${option.name} - ${option.price}`}
-                        style={{ width: 300 }}
+
+                        onChange={(e) => setBookForm({ ...bookForm, gender: e.target.value })}
                         renderInput={(params) => <TextField
                             {...params}
                             fullWidth
@@ -64,16 +72,16 @@ const BookNow = ({ open, handleClose, shop_name }) => {
 
                     <Autocomplete
                         fullWidth
-                        id="combo-box-demo"
                         options={['Male', 'Female', 'Other']}
                         getOptionLabel={(option) => option}
-                        style={{ width: 300 }}
+
+                        onChange={(e) => setBookForm({ ...bookForm, gender: e.target.value })}
                         renderInput={(params) => <TextField
                             {...params}
                             fullWidth
                             label={'Gender'}
                             value={bookForm.gender}
-                            onChange={(e) => setBookForm({ ...bookForm, gender: e.target.value })}
+
                         />}
                     />
                     <TextField
@@ -93,7 +101,7 @@ const BookNow = ({ open, handleClose, shop_name }) => {
                 </Button>
 
             </Flexbox>
-        </ModalComponent>
+        </ModalComponent >
     )
 }
 

@@ -3,6 +3,8 @@ import { Flexbox } from '../../styled-component';
 import { Typography, Button } from '@material-ui/core'
 import ModalComponent from '../../components/ModalComponent/ModalComponent'
 import { getUsersBookings } from '../../Api/apis';
+import { db } from '../../Authentication/firebase';
+import { ref, remove } from 'firebase/database';
 
 
 
@@ -34,9 +36,20 @@ const UsersBooking = ({ open, handleClose }) => {
         setMyBookings(response)
     }
 
+    const handleCancelBooking = async (id) => {
+        try {
+            await remove(db, `/UsersBookings/` + id)
+            handleGetUserBookings()
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
+    console.log(myBooking, "myBooking")
     useEffect(() => {
-        handleGetUserBookings()
-    }, [])
+        if (open)
+            handleGetUserBookings()
+    }, [open])
     return (
         <ModalComponent
             open={open}
@@ -46,17 +59,18 @@ const UsersBooking = ({ open, handleClose }) => {
             divider={true}
         >
             <Flexbox dir={'column'} pad={'16px'} height={'100%'} gap={'24px'} >
-                {myBooking.map(item => (
-                    <Flexbox style={{ border: '1px solid lightgray' }} justify={'space-between'} key={item.name} gap={'8px'} pad={'8px'}>
-                        <Typography>{item.name}</Typography>
-                        <Typography>{item.time}</Typography>
-                        <Typography>{item.price}</Typography>
-                        <Button onClick={() => {
-                            const updatedBookings = myBooking.filter(booking => booking.name !== item.name)
-                            setMyBookings(updatedBookings)
-                        }} variant={'contained'}>Cancel</Button>
-                    </Flexbox>
-                ))}
+                {myBooking.length === 0 ?
+                    <Typography>No Bookings</Typography> :
+                    myBooking.map(item => (
+                        <Flexbox style={{ border: '1px solid lightgray' }} justify={'space-between'} key={item.name} gap={'8px'} pad={'8px'}>
+                            <Typography>{item.name}</Typography>
+                            <Typography>{item.time}</Typography>
+                            <Typography>{item.price}</Typography>
+                            <Button onClick={() => {
+                                handleCancelBooking(item.id)
+                            }} variant={'contained'}>Cancel</Button>
+                        </Flexbox>
+                    ))}
 
             </Flexbox>
         </ModalComponent>

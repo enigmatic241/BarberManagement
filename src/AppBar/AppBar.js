@@ -114,7 +114,7 @@ export default function PrimarySearchAppBar() {
             const filterUser = userDetails.filter(user => user.email === currentUser?.email)
             setUserType(filterUser[0]?.user_type)
         }
-    }, [userDetails])
+    }, [userDetails, currentUser])
 
 
     const isMenuOpen = Boolean(anchorEl);
@@ -140,22 +140,20 @@ export default function PrimarySearchAppBar() {
 
     const handleLogOut = (e) => {
         e.preventDefault()
-        console.log(e)
+
         if (!isSignOut) {
             setSignOut(true)
             try {
                 doSignOut()
-                history('/')
+
+                history('/login')
 
             } catch (err) {
                 // setErrorMessage(err.message)
                 setSignOut(false)
                 console.log(err)
             }
-
-
             // doSendEmailVerification()
-
         }
     }
 
@@ -172,8 +170,8 @@ export default function PrimarySearchAppBar() {
         >
 
             <MenuItem onClick={handleMenuClose}>{currentUser?.email}</MenuItem>
-            <MenuItem onClick={() => {
-                handleMenuClose()
+            <MenuItem onClick={(e) => {
+                handleMenuClose(e)
                 handleLogOut(e)
             }}>Logout</MenuItem>
         </Menu>
@@ -223,6 +221,11 @@ export default function PrimarySearchAppBar() {
 
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
+                        {
+                            userLoggedIn && userType === 'MERCHANT' &&
+                            <Button onClick={() => setOpenMerchantProducts(true)} color="inherit">
+                                <Typography>Add My Shop</Typography>
+                            </Button>}
                         {
                             userLoggedIn && userType === 'CUSTOMER' &&
                             <Button onClick={() => setOpenMyBookings(true)} color="inherit">
