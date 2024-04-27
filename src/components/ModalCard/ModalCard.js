@@ -6,7 +6,7 @@ import { Typography } from '@material-ui/core'
 
 
 const styles = theme => {
-    console.log(theme)
+
     return {
         root: {
             flex: 1,

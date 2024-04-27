@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
-import { Flexbox } from '../../styled-component'
-
 import useUserDetails from '../../components/Hooks/useUserDetails'
 import UserHome from './UserHome/UserHome'
 import { useAuth } from '../../Context/AuthContext'
+import MerchantHome from './MerchantHome/MerchantHome'
+// import MerchantHome from './MerchantHome/MerchantHome'
 
 const Home = () => {
     const { userDetails } = useUserDetails()
@@ -21,6 +21,7 @@ const Home = () => {
     return (
         <>
             {userType === 'CUSTOMER' && <UserHome />}
+            {userType === 'MERCHANT' && <MerchantHome />}
         </>
     )
 }

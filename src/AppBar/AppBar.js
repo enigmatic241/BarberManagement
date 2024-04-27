@@ -23,6 +23,7 @@ import useUserDetails from '../components/Hooks/useUserDetails';
 import { useNavigate } from 'react-router-dom';
 import { doSignOut } from '../Authentication/auth';
 import { Flexbox } from '../styled-component';
+import AddBarberShops from '../Modals/AddShops';
 
 
 
@@ -101,13 +102,14 @@ export default function PrimarySearchAppBar() {
     const [openMyBookings, setOpenMyBookings] = useState(false)
     const [openMerchantProducts, setOpenMerchantProducts] = useState(false)
     const [openMerchantBookings, setOpenMerchantBookings] = useState(false)
+    const [addBarberShops, setAddBarberShops] = useState(false)
     const [isSignOut, setSignOut] = useState(false)
     const [userType, setUserType] = useState('')
 
     const { userDetails } = useUserDetails()
     const history = useNavigate()
 
-    console.log(userLoggedIn, "appbar", userType)
+    //console.log(userLoggedIn, "appbar", userType, currentUser)
 
     useEffect(() => {
         if (userDetails) {
@@ -145,7 +147,6 @@ export default function PrimarySearchAppBar() {
             setSignOut(true)
             try {
                 doSignOut()
-
                 history('/login')
 
             } catch (err) {
@@ -215,7 +216,12 @@ export default function PrimarySearchAppBar() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography className={classes.title} variant="h6" noWrap>
+                    <Typography style={{
+                        cursor: 'pointer'
+                    }} onClick={() => {
+                        if (userLoggedIn) { history('/home') } else
+                            history('/welcome')
+                    }} className={classes.title} variant="h6" noWrap>
                         Clip & Snip: Your Barber Booking Buddy
                     </Typography>
 
@@ -223,7 +229,7 @@ export default function PrimarySearchAppBar() {
                     <div className={classes.sectionDesktop}>
                         {
                             userLoggedIn && userType === 'MERCHANT' &&
-                            <Button onClick={() => setOpenMerchantProducts(true)} color="inherit">
+                            <Button onClick={() => setAddBarberShops(true)} color="inherit">
                                 <Typography>Add My Shop</Typography>
                             </Button>}
                         {
@@ -291,6 +297,7 @@ export default function PrimarySearchAppBar() {
             <UsersBooking open={openMyBookings} handleClose={() => setOpenMyBookings(false)} />
             <MerchantProduct open={openMerchantProducts} handleClose={() => setOpenMerchantProducts(false)} />
             <MerchantBookings open={openMerchantBookings} handleClose={() => setOpenMerchantBookings(false)} />
+            <AddBarberShops open={addBarberShops} handleClose={() => setAddBarberShops(false)} />
         </div>
     );
 }

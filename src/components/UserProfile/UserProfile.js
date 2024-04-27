@@ -6,7 +6,7 @@ import { Flexbox } from '../../styled-component'
 
 const UserProfile = () => {
     const { currentUser } = useAuth()
-    console.log(currentUser)
+
     return (
         <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '5px', width: '300px', backgroundColor: 'white' }}>
 

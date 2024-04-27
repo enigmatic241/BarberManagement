@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Flexbox } from '../../../styled-component'
 import { Typography, Button } from '@material-ui/core'
 
 import BookNow from '../../../Modals/BookNow'
-
+import { getBarberShops } from '../../../Api/apis'
 
 
 const DUMMY_BARBER_SHOP = [
@@ -27,8 +27,21 @@ const DUMMY_BARBER_SHOP = [
 
 const UserHome = () => {
     const [open, setOpen] = React.useState(false)
+    const [barberShops, setBarberShops] = React.useState([])
 
-    console.log(open, "open")
+
+
+    const handleGetBarberShop = async () => {
+        const response = await getBarberShops()
+        if (response) {
+            setBarberShops(response)
+
+        }
+    }
+
+    useEffect(() => {
+        handleGetBarberShop()
+    }, [])
     return (
         <Flexbox style={{
             flexWrap: 'wrap',
@@ -38,11 +51,11 @@ const UserHome = () => {
 
 
             {
-                DUMMY_BARBER_SHOP.map((shop, index) => {
+                barberShops.map((shop, index) => {
                     return (
                         <>
                             <Card key={index} shop={shop} setOpen={setOpen} />
-                            <BookNow shop_name={shop.name} open={open} handleClose={() => setOpen(false)} title={'Profile'} />
+                            <BookNow shop={shop} shop_name={shop.name} open={open} handleClose={() => setOpen(false)} title={'Profile'} />
                         </>
                     )
                 })
@@ -53,6 +66,7 @@ const UserHome = () => {
 }
 
 const Card = ({ setOpen, shop }) => {
+
     return (
         <Flexbox style={{
             border: '1px solid lightgray',
@@ -61,6 +75,7 @@ const Card = ({ setOpen, shop }) => {
             <Flexbox height={'100%'} justify={'space-between'} dir={'column'}>
                 <Flexbox dir={'column'} gap={'10px'}>
                     <Typography bold>{shop.name}</Typography>
+                    <Typography>Owner : {shop.owner}</Typography>
                     <Typography>Address : {shop.address}</Typography>
                     <Typography>Phone:{shop.phone}</Typography>
                 </Flexbox>

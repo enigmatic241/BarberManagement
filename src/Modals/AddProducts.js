@@ -1,24 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Flexbox } from '../styled-component';
 import { TextField, Button } from '@material-ui/core';
 import ModalComponent from '../components/ModalComponent/ModalComponent';
-import { addProductsOfShops } from '../Api/apis';
+import { addProductsOfShops, getBarberShops } from '../Api/apis';
+import { useAuth } from '../Context/AuthContext';
+import { Autocomplete } from '@material-ui/lab';
 
-
-const shopName = 'mrigank'
 
 
 const AddProducts = ({ open, handleClose, classes }) => {
 
-    const [productsForm, setProductsForm] = useState({ name: '', price: '', description: '' })
+    const [productsForm, setProductsForm] = useState({ name: '', price: '', description: '', shopName: '' })
+    const [myShop, setMyShop] = useState([])
+
+    const { currentUser } = useAuth()
+
+    const handleGetMyShop = async () => {
+        const response = await getBarberShops()
+        if (response) {
+            const filterShop = response.filter(item => item.owner === currentUser?.email)
+            setMyShop(filterShop)
+        }
+    }
+    useEffect(() => { if (open) handleGetMyShop() }, [open])
 
     const handleAddProducts = async () => {
         const response = await addProductsOfShops({
             ...productsForm,
-            shopName
+            owner: currentUser.email,
+            owner_name: currentUser.name
         })
-        console.log(response)
+
         if (response) {
             alert('Product Added Successfully')
             handleClose()
@@ -36,6 +49,14 @@ const AddProducts = ({ open, handleClose, classes }) => {
         >
             <Flexbox dir={'column'} justify={'space-between'} gap={'28px'} margin={'16px'}>
                 <Flexbox dir={'column'} gap={'16px'} >
+                    <Autocomplete
+                        fullWidth
+                        options={myShop}
+                        value={productsForm.shopName}
+                        getOptionLabel={(option) => option.name}
+                        onChange={(e, value) => setProductsForm({ ...productsForm, shopName: value.name })}
+                        renderInput={(params) => <TextField {...params} label="Select Your Shop" />}
+                    />
                     <TextField
                         fullWidth
                         label={'Service Name'}

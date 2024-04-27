@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import Login from './Login/Login';
 import Register from './Register/Register';
 import UserHome from './App/UserHome/UserHome';
+import AppMainPage from './App/AppMainPage';
 
 
 
@@ -24,7 +25,7 @@ const AppRoutes = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/customer_home" element={<UserHome />} />
-            <Route element={<></>} />
+            <Route path="/welcome" element={<AppMainPage />} />
         </Routes >
 
     );

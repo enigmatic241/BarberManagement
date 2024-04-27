@@ -3,48 +3,26 @@ import { Flexbox } from '../styled-component';
 import { Typography, Button } from '@material-ui/core'
 import ModalComponent from '../components/ModalComponent/ModalComponent'
 import { getBarberProducts } from '../Api/apis';
-
-
-
-const BarbProducts = [
-    {
-        name: 'Trim',
-        price: '₹300',
-        description: 'A simple and neat haircut to maintain your current style.',
-    },
-    {
-        name: 'Layered Cut',
-        price: '₹500',
-        description: 'A haircut with layers to add volume and texture to your hair.',
-    },
-    {
-        name: 'Bob Cut',
-        price: '₹400',
-        description: 'A classic short haircut where the hair is typically cut straight around the head at jaw-length.',
-    },
-    {
-        name: 'Pixie Cut',
-        price: '₹450',
-        description: 'A short hairstyle with short, close-cropped hair on the sides and back of the head and slightly longer hair on top.',
-    },
-    // Add more barber products with name, price, and description as needed
-];
-
+import { useAuth } from '../Context/AuthContext';
 
 
 const MerchantProduct = ({ open, handleClose }) => {
-    const [barberProducts, setBarberProducts] = useState(BarbProducts)
+    const [barberProducts, setBarberProducts] = useState([])
+
+    const { currentUser } = useAuth()
 
     const getProducts = async () => {
         const response = await getBarberProducts()
         if (response) {
-            setBarberProducts(response)
+            const filteredProducts = response.filter(item => item.owner === currentUser?.email)
+            setBarberProducts(filteredProducts)
         }
-        console.log(response)
     }
 
+
     useEffect(() => {
-        getProducts()
+        if (open)
+            getProducts()
     }, [open])
 
     return (
@@ -56,17 +34,20 @@ const MerchantProduct = ({ open, handleClose }) => {
             divider={true}
         >
             <Flexbox dir={'column'} pad={'16px'} height={'100%'} gap={'24px'} >
-                {barberProducts.map(item => (
-                    <Flexbox style={{ border: '1px solid lightgray' }} justify={'space-between'} key={item.name} gap={'8px'} pad={'8px'}>
-                        <Typography>{item.name}</Typography>
-                        <Typography>{item.price}</Typography>
-                        <Typography>{item.description}</Typography>
-                        <Button onClick={() => {
-                            const updatedBookings = barberProducts.filter(booking => booking.name !== item.name)
-                            // setBarberProducts(updatedBookings)
-                        }} variant={'contained'}>Cancel</Button>
-                    </Flexbox>
-                ))}
+                {barberProducts.legth === 0 ? <Typography>No Products</Typography> :
+                    barberProducts.map(item => (
+                        <Flexbox style={{ border: '1px solid lightgray' }} justify={'space-between'} key={item.name} gap={'8px'} pad={'8px'}>
+                            <Typography>{item.name}</Typography>
+                            <Typography>{item.price}</Typography>
+                            <Typography>{item.description}</Typography>
+                            <Typography>{item.shopName}</Typography>
+
+                            <Button onClick={() => {
+                                const updatedBookings = barberProducts.filter(booking => booking.name !== item.name)
+                                // setBarberProducts(updatedBookings)
+                            }} variant={'contained'}>Cancel</Button>
+                        </Flexbox>
+                    ))}
 
             </Flexbox>
         </ModalComponent>

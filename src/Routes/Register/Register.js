@@ -44,7 +44,7 @@ const Register = () => {
         })
 
         if (response) {
-            console.log(response, "handleAddUserDetails")
+            console.log('User Added Successfully')
         }
     }
 
@@ -58,7 +58,7 @@ const Register = () => {
                 className="space-y-4"
             >
 
-                <Flexbox dir={'column'} style={{ border: "1px solid indigo", borderRadius: "10px" }} width={'400px'} height={'80vh'} pad={'28px'} gap={"30px"} margin={'72px 0'} bColor={'white'}>
+                <Flexbox dir={'column'} style={{ border: "1px solid indigo", borderRadius: "10px" }} width={'400px'} height={'550px'} pad={'28px'} gap={"30px"} margin={'72px 0'} bColor={'white'}>
                     <Typography variant={'h6'}>Register</Typography>
                     <Flexbox dir={'column'} gap={'10px'}>
                         <TextField
@@ -76,6 +76,7 @@ const Register = () => {
                         <TextField
                             fullWidth
                             label={'Password'}
+                            type={'password'}
                             value={registerForm.password}
                             onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
                         />

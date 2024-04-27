@@ -12,7 +12,7 @@ import {
 
 
 export const addProductsOfShops = async (params) => {
-    console.log(params)
+
     return await fetch(`${BASE_URL}${BARBER_PRODUCTS}`, {
         method: 'POST',
         body: JSON.stringify(params),
@@ -111,5 +111,34 @@ export const getUserDetails = async () => {
                 });
             }
             return userDetails;
+        });
+}
+
+export const addShops = async (params) => {
+    return await fetch(`${BASE_URL}${BARBER_SHOPS}`, {
+        method: 'POST',
+        body: JSON.stringify(params),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+}
+
+export const getBarberShops = async () => {
+    return await fetch(`${BASE_URL}${BARBER_SHOPS}`)
+        .then(response => response.json())
+        .then(data => {
+            let shops = [];
+            for (let key in data) {
+                shops.push({
+                    id: key,
+                    ...data[key]
+                });
+            }
+            return shops;
         });
 }

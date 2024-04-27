@@ -66,6 +66,7 @@ const Login = () => {
                     <Flexbox>
                         <TextField
                             fullWidth
+                            type={'password'}
                             label={'Password'}
                             value={loginForm.password}
                             onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}

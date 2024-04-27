@@ -3,24 +3,24 @@ import React, { useState } from 'react'
 import { Flexbox } from '../styled-component';
 import { TextField, Button } from '@material-ui/core';
 import ModalComponent from '../components/ModalComponent/ModalComponent';
-import { addProductsOfShops } from '../Api/apis';
+import { addShops } from '../Api/apis';
+import { useAuth } from '../Context/AuthContext';
 
 
-const shopName = 'mrigank'
-
-
-const AddProducts = ({ open, handleClose, classes }) => {
+const AddBarberShops = ({ open, handleClose, classes }) => {
 
     const [shopForm, setShopForm] = useState({ name: '', address: '', phone: '', image: '' })
+    const { currentUser } = useAuth()
 
-    const handleAddProducts = async () => {
-        const response = await addProductsOfShops({
-            ...productsForm,
-            shopName
+    const handleAddShops = async () => {
+        const response = await addShops({
+            ...shopForm,
+            owner: currentUser.email,
+            owner_name: currentUser.name
         })
-        console.log(response)
+
         if (response) {
-            alert('Product Added Successfully')
+            alert('Shop Added Successfully')
             handleClose()
         }
     }
@@ -29,7 +29,7 @@ const AddProducts = ({ open, handleClose, classes }) => {
         <ModalComponent
             open={open}
             onClose={handleClose}
-            title={'Add Products'}
+            title={'Add Shops'}
             classes={classes}
             divider={true}
 
@@ -38,29 +38,29 @@ const AddProducts = ({ open, handleClose, classes }) => {
                 <Flexbox dir={'column'} gap={'16px'} >
                     <TextField
                         fullWidth
-                        label={'Service Name'}
-                        value={productsForm.name}
-                        onChange={(e) => setProductsForm({ ...productsForm, name: e.target.value })}
+                        label={'Shop Name'}
+                        value={shopForm.name}
+                        onChange={(e) => setShopForm({ ...shopForm, name: e.target.value })}
 
 
                     />
                     <TextField
                         fullWidth
-                        label={'Price'}
-                        value={productsForm.price}
-                        onChange={(e) => setProductsForm({ ...productsForm, price: e.target.value })}
+                        label={'Phone number'}
+                        value={shopForm.phone}
+                        onChange={(e) => setShopForm({ ...shopForm, phone: e.target.value })}
                     />
                     <TextField
                         fullWidth
-                        label={'Description'}
-                        value={productsForm.description}
-                        onChange={(e) => setProductsForm({ ...productsForm, description: e.target.value })}
+                        label={'Address'}
+                        value={shopForm.address}
+                        onChange={(e) => setShopForm({ ...shopForm, address: e.target.value })}
                     />
                 </Flexbox>
                 <Button onClick={() => {
-                    handleAddProducts()
+                    handleAddShops()
                 }} variant={'contained'}>
-                    Add Product
+                    Add Shop
                 </Button>
             </Flexbox>
         </ModalComponent>
@@ -68,4 +68,4 @@ const AddProducts = ({ open, handleClose, classes }) => {
 }
 
 
-export default AddProducts
+export default AddBarberShops
