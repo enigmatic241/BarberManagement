@@ -4,6 +4,9 @@ import { Typography, Button } from '@material-ui/core'
 import ModalComponent from '../components/ModalComponent/ModalComponent'
 import { getBarberProducts } from '../Api/apis';
 import { useAuth } from '../Context/AuthContext';
+import { ref, getDatabase, remove } from 'firebase/database';
+
+const database = getDatabase()
 
 
 const MerchantProduct = ({ open, handleClose }) => {
@@ -25,6 +28,22 @@ const MerchantProduct = ({ open, handleClose }) => {
             getProducts()
     }, [open])
 
+    const handleRemoveProduct = async (product) => {
+
+
+        const productRef = ref(database, `BarberProducts/${product.id}`);
+
+
+        remove(productRef)
+            .then(() => {
+                console.log("Entry deleted successfully")
+                getProducts();
+            })
+            .catch((error) => {
+                console.error("Error deleting entry:", error);
+            });
+    }
+
     return (
         <ModalComponent
             open={open}
@@ -42,10 +61,9 @@ const MerchantProduct = ({ open, handleClose }) => {
                             <Typography>{item.description}</Typography>
                             <Typography>{item.shopName}</Typography>
 
-                            <Button onClick={() => {
-                                const updatedBookings = barberProducts.filter(booking => booking.name !== item.name)
-                                // setBarberProducts(updatedBookings)
-                            }} variant={'contained'}>Cancel</Button>
+                            <Button color={'secondary'} onClick={() => {
+                                handleRemoveProduct(item)
+                            }} variant={'contained'}>Remove</Button>
                         </Flexbox>
                     ))}
 
