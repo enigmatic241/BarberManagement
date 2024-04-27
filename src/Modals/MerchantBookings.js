@@ -4,6 +4,10 @@ import { Typography, Button } from '@material-ui/core'
 import ModalComponent from '../components/ModalComponent/ModalComponent'
 import { getUsersBookings } from '../Api/apis';
 import { useAuth } from '../Context/AuthContext';
+import { ref, update, getDatabase, remove } from 'firebase/database'
+import Chip from '@material-ui/core/Chip';
+
+const database = getDatabase()
 
 const MerchantBookings = ({ open, handleClose }) => {
     const [merchantBookings, setMerchantBookings] = useState([])
@@ -15,6 +19,31 @@ const MerchantBookings = ({ open, handleClose }) => {
             const filteredBookings = response.filter(item => item.owner === currentUser?.email)
             setMerchantBookings(filteredBookings)
         }
+    }
+
+    const handleBookings = async (booking, operation) => {
+        // const response = await removeShop(shop)
+        const bookingRef = ref(database, `UserBookings/${booking.id}`);
+
+        const bookingStatus = {
+
+
+        }
+        if (operation === 'cancel') {
+            bookingStatus['status'] = 'cancelled'
+        }
+        if (operation === 'confirm') {
+            bookingStatus['status'] = 'confirm'
+        }
+
+        update(bookingRef, bookingStatus)
+            .then(() => {
+                console.log("Entry deleted successfully")
+                getMerchantBooking();
+            })
+            .catch((error) => {
+                console.error("Error deleting entry:", error);
+            });
     }
 
     useEffect(() => {
@@ -37,11 +66,22 @@ const MerchantBookings = ({ open, handleClose }) => {
                             <Typography>{item.price}</Typography>
                             <Typography>{item.gender}</Typography>
                             <Typography>{item.time}</Typography>
-                            <Button onClick={() => {
-                                const updatedBookings = merchantBookings.filter(booking => booking.name !== item.name)
-                                // setBarberProducts(updatedBookings)
-                            }} variant={'contained'}>Cancel</Button>
-                            <Button onClick={() => { }} variant={'contained'}>Confirm</Button>
+
+                            {item.status === 'cancelled' && <Chip
+                                color={'secondary'}
+                                label="Cancelled"
+                                variant="outlined"
+                            />}
+                            {item.status === 'confirm' && <Chip
+                                color={'primary'}
+                                label="Confirmed"
+                                variant="outlined"
+                            />}
+
+                            {!item.status && <Button onClick={() => {
+                                handleBookings(item, 'cancel')
+                            }} variant={'contained'}>Cancel</Button>}
+                            {!item.status && <Button onClick={() => { handleBookings(item, "confirm") }} variant={'contained'}>Confirm</Button>}
                         </Flexbox>
                     ))}
 
