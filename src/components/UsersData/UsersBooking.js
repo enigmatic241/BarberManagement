@@ -3,13 +3,12 @@ import { Flexbox } from '../../styled-component';
 import { Typography, Button } from '@material-ui/core'
 import ModalComponent from '../../components/ModalComponent/ModalComponent'
 import { getUsersBookings } from '../../Api/apis';
-import { db } from '../../Authentication/firebase';
-import { ref, remove } from 'firebase/database';
-import CheckIcon from '@material-ui/icons/Check';
 
-import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
+import { ref, remove, getDatabase } from 'firebase/database';
+import Chip from '@material-ui/core/Chip';
 import { useAuth } from '../../Context/AuthContext';
 
+const database = getDatabase()
 
 const UsersBooking = ({ open, handleClose }) => {
     const [myBooking, setMyBookings] = useState([])
@@ -26,12 +25,20 @@ const UsersBooking = ({ open, handleClose }) => {
     }
 
     const handleCancelBooking = async (id) => {
-        try {
-            await remove(db, `/UsersBookings/` + id)
-            handleGetUserBookings()
-        } catch (err) {
-            console.log(err)
-        }
+        console.log(id, myBooking)
+
+
+        const bookingRef = ref(database, `UserBookings/${id}`);
+
+        // Remove the entry
+        remove(bookingRef)
+            .then(() => {
+                console.log("Entry deleted successfully")
+                handleGetUserBookings();
+            })
+            .catch((error) => {
+                console.error("Error deleting entry:", error);
+            });
 
     }
 
@@ -56,7 +63,20 @@ const UsersBooking = ({ open, handleClose }) => {
                             <Typography>{item.shopId}</Typography>
                             <Typography>{item.time}</Typography>
                             <Typography>{item.price}</Typography>
-                            {item.confirm ? <CheckIcon /> : <QueryBuilderIcon />}
+                            {item.status === 'cancelled' && <Chip
+                                color={'secondary'}
+                                label="Cancelled"
+                                variant="outlined"
+                            />}
+                            {item.status === 'confirm' && <Chip
+                                color={'primary'}
+                                label="Confirmed"
+                                variant="outlined"
+                            />}
+                            {!item.status && <Chip
+                                color={'default'}
+                                label="Pending"
+                                variant="outlined" />}
 
                             <Button onClick={() => {
                                 handleCancelBooking(item.id)
