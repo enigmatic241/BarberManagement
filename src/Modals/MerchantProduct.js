@@ -8,7 +8,6 @@ import { ref, getDatabase, remove } from 'firebase/database';
 
 const database = getDatabase()
 
-
 const MerchantProduct = ({ open, handleClose }) => {
     const [barberProducts, setBarberProducts] = useState([])
 
@@ -22,7 +21,6 @@ const MerchantProduct = ({ open, handleClose }) => {
         }
     }
 
-
     useEffect(() => {
         if (open)
             getProducts()
@@ -30,10 +28,7 @@ const MerchantProduct = ({ open, handleClose }) => {
 
     const handleRemoveProduct = async (product) => {
 
-
         const productRef = ref(database, `BarberProducts/${product.id}`);
-
-
         remove(productRef)
             .then(() => {
                 console.log("Entry deleted successfully")

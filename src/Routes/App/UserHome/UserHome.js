@@ -29,8 +29,6 @@ const UserHome = () => {
     const [open, setOpen] = React.useState(false)
     const [barberShops, setBarberShops] = React.useState([])
 
-
-
     const handleGetBarberShop = async () => {
         const response = await getBarberShops()
         if (response) {
@@ -42,22 +40,29 @@ const UserHome = () => {
     useEffect(() => {
         handleGetBarberShop()
     }, [])
+
     return (
         <Flexbox style={{
             flexWrap: 'wrap',
             marginTop: '64px',
             justifyContent: 'center',
         }} gap={'16px'} pad={'16px'} >
-
-
             {
                 barberShops.map((shop, index) => {
                     return (
-                        <>
-                            <Card key={index} shop={shop} setOpen={setOpen} />
-                            <BookNow shop={shop} shop_name={shop.name} open={open} handleClose={() => setOpen(false)} title={'Profile'} />
-                        </>
-                    )
+                        <React.Fragment key={index}>
+                            <Card shop={shop} setOpen={setOpen} index={index} />
+                            <BookNow
+                                shop={shop}
+                                key={index}
+                                shop_name={shop.name}
+                                open={open === index}
+                                handleClose={() => setOpen(null)}
+                            />
+
+                        </React.Fragment>
+                    );
+
                 })
             }
 
@@ -65,21 +70,29 @@ const UserHome = () => {
     )
 }
 
-const Card = ({ setOpen, shop }) => {
+const Card = ({ setOpen, shop, index }) => {
 
     return (
-        <Flexbox style={{
-            border: '1px solid lightgray',
-            borderRadius: '10px',
-        }} dir={'column'} width={'300px'} height={'300px'} pad={'16px'} bColor={'white'}>
+        <Flexbox
+            style={{
+                border: '1px solid lightgray',
+                borderRadius: '10px',
+                borderTop: '4px solid #107869'
+            }}
+            dir={'column'}
+            width={'300px'}
+            height={'300px'}
+            pad={'16px'}
+            bColor={'white'}
+        >
             <Flexbox height={'100%'} justify={'space-between'} dir={'column'}>
                 <Flexbox dir={'column'} gap={'10px'}>
-                    <Typography bold>{shop.name}</Typography>
+                    <Typography variant={'h6'} style={{ fontWeight: 'bold' }}>{shop.name}</Typography>
                     <Typography>Owner : {shop.owner}</Typography>
-                    <Typography>Address : {shop.address}</Typography>
+                    <Typography noWrap>Address : {shop.address}</Typography>
                     <Typography>Phone:{shop.phone}</Typography>
                 </Flexbox>
-                <Button onClick={() => { setOpen(true) }} color={'primary'} variant={'contained'}>Book Appointment</Button>
+                <Button onClick={() => { setOpen(index) }} color={'primary'} variant={'contained'}>Book Appointment</Button>
             </Flexbox>
 
         </Flexbox>

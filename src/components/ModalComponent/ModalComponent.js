@@ -23,8 +23,8 @@ const styles = theme => ({
     },
     card: {
         width: 700,
-        maxHeight: `calc(100vh - ${theme.appBarHeight + 2 * theme.pad?.lg}px)`,
-        maxWidth: `calc(100vw - ${2 * theme.pad?.sm}px)`,
+        maxHeight: `calc(100vh - ${theme.appBarHeight + 2 * theme.pad.lg}px)`,
+        maxWidth: `calc(100vw - ${2 * theme.pad.sm}px)`,
         margin: '6px',
         overflow: 'hidden',
         [theme.breakpoints.down('sm')]: {

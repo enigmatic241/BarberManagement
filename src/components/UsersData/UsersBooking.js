@@ -54,7 +54,7 @@ const UsersBooking = ({ open, handleClose }) => {
             // classes={classes}
             divider={true}
         >
-            <Flexbox dir={'column'} pad={'16px'} height={'100%'} gap={'24px'} >
+            <Flexbox dir={'column'} pad={'16px'} gap={'24px'} >
                 {myBooking.length === 0 ?
                     <Typography>No Bookings</Typography> :
                     myBooking.map(item => (
