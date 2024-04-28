@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { doSignOut } from '../Authentication/auth';
 import { Flexbox } from '../styled-component';
 import AddBarberShops from '../Modals/AddShops';
+import { appLogo } from '../Images';
 
 
 
@@ -216,6 +217,12 @@ export default function PrimarySearchAppBar() {
                     >
                         <MenuIcon />
                     </IconButton>
+                    <img style={{
+                        width: '35px',
+                        height: '35px',
+                        marginRight: '5px'
+
+                    }} src={appLogo} />
                     <Typography style={{
                         cursor: 'pointer'
                     }} onClick={() => {

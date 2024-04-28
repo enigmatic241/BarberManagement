@@ -1,5 +1,5 @@
 import SampleAppBar from "./AppBar/AppBar";
-import Home from "./Routes/App/Home";
+import React, { useEffect } from "react";
 import AppRoutes from "./Routes/Routes";
 import { AuthProvider } from "./Context/AuthContext";
 import { ThemeProvider } from "@material-ui/core";
@@ -7,8 +7,12 @@ import theme from "./theme";
 import { BrowserRouter } from "react-router-dom";
 import Image from "./Images/homeImage.avif";
 import "./styles.css";
+import config from "../src/Config"
 
 export default function App() {
+  useEffect(() => {
+    document.title = config.appName; // Set the title dynamically
+  }, []);
   return (
     <BrowserRouter>
       <div className="App" style={{

@@ -8,26 +8,6 @@ import { addUserBookings, getBarberProducts } from '../Api/apis'
 import { useAuth } from '../Context/AuthContext'
 
 
-
-const hairStyles = [
-    { name: 'Trim', price: '₹300' },
-    { name: 'Layered Cut', price: '₹500' },
-    { name: 'Bob Cut', price: '₹400' },
-    { name: 'Pixie Cut', price: '₹450' },
-    { name: 'Fringe Cut', price: '₹350' },
-    { name: 'Balayage', price: '₹700' },
-    { name: 'Highlights', price: '₹600' },
-    { name: 'Hair Extensions', price: '₹1000' },
-    { name: 'Perm', price: '₹800' },
-    { name: 'Updo', price: '₹600' },
-    { name: 'Braids', price: '₹550' },
-    { name: 'Hair Coloring', price: '₹700' },
-    { name: 'Blowout', price: '₹400' },
-    { name: 'Hair Straightening', price: '₹1000' },
-    { name: 'Hair Relaxing', price: '₹900' },
-];
-
-
 const BookNow = ({ open, handleClose, shop_name, shop }) => {
     const [bookForm, setBookForm] = useState({ name: '', price: '', time: '', gender: '', phone: '' })
     const { currentUser } = useAuth()
@@ -59,7 +39,6 @@ const BookNow = ({ open, handleClose, shop_name, shop }) => {
         if (open) {
             handleGetShopProducts()
         }
-
     }, [open])
 
 
@@ -68,11 +47,9 @@ const BookNow = ({ open, handleClose, shop_name, shop }) => {
             open={open}
             onClose={handleClose}
             title={`Book Now in ${shop_name}`}
-
             divider={true}
-
         >
-            <Flexbox dir={'column'} pad={'16px'} height={'100%'} gap={'24px'}>
+            <Flexbox dir={'column'} pad={'16px'} gap={'24px'}>
                 <Flexbox dir={'column'} gap={'16px'}>
                     <TextField
                         fullWidth
@@ -113,7 +90,7 @@ const BookNow = ({ open, handleClose, shop_name, shop }) => {
                         (val) => setBookForm({ ...bookForm, time: val.target.value })
                     } />
                 </Flexbox>
-                <Button onClick={() => {
+                <Button color={'primary'} disabled={bookForm.time === '' || bookForm.name === ''} color={'primary'} onClick={() => {
                     handleAddBookings()
                 }} variant='contained'>
                     Book
