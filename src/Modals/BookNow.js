@@ -90,7 +90,7 @@ const BookNow = ({ open, handleClose, shop_name, shop }) => {
                         (val) => setBookForm({ ...bookForm, time: val.target.value })
                     } />
                 </Flexbox>
-                <Button color={'primary'} disabled={bookForm.time === '' || bookForm.name === ''} color={'primary'} onClick={() => {
+                <Button color={'primary'} disabled={bookForm.time === '' || bookForm.name === ''} onClick={() => {
                     handleAddBookings()
                 }} variant='contained'>
                     Book
